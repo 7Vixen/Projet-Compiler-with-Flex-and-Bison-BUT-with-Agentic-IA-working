@@ -62,33 +62,32 @@
      T_OR = 278,
      T_NON = 279,
      T_OUT = 280,
-     T_READ = 281,
-     T_IDENT = 282,
-     T_STRING = 283,
-     T_CONST_INT = 284,
-     T_CONST_FLOAT = 285,
-     T_ASSIGN = 286,
-     T_EQ_INIT = 287,
-     T_LE = 288,
-     T_GE = 289,
-     T_EQ = 290,
-     T_NEQ = 291,
-     T_LT = 292,
-     T_GT = 293,
-     T_PLUS = 294,
-     T_MINUS = 295,
-     T_MUL = 296,
-     T_DIV = 297,
-     T_SEMI = 298,
-     T_COLON = 299,
-     T_PIPE = 300,
-     T_LBRACE = 301,
-     T_RBRACE = 302,
-     T_LBRACK = 303,
-     T_RBRACK = 304,
-     T_LPAREN = 305,
-     T_RPAREN = 306,
-     T_COMMA = 307
+     T_IDENT = 281,
+     T_STRING = 282,
+     T_CONST_INT = 283,
+     T_CONST_FLOAT = 284,
+     T_ASSIGN = 285,
+     T_EQ_INIT = 286,
+     T_LE = 287,
+     T_GE = 288,
+     T_EQ = 289,
+     T_NEQ = 290,
+     T_LT = 291,
+     T_GT = 292,
+     T_PLUS = 293,
+     T_MINUS = 294,
+     T_MUL = 295,
+     T_DIV = 296,
+     T_SEMI = 297,
+     T_COLON = 298,
+     T_PIPE = 299,
+     T_LBRACE = 300,
+     T_RBRACE = 301,
+     T_LBRACK = 302,
+     T_RBRACK = 303,
+     T_LPAREN = 304,
+     T_RPAREN = 305,
+     T_COMMA = 306
    };
 #endif
 
@@ -109,7 +108,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 113 "syntaxic.tab.h"
+#line 112 "syntaxic.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

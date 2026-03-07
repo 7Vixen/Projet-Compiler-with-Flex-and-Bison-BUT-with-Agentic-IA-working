@@ -1,12 +1,3 @@
-/*
- * lexical.l
- * =========
- * Analyseur Lexical FLEX pour le compilateur ProLang.
- * ProLang Compiler — Master 1 USTHB 2025/2026
- *
- * Compile avec : flex lexical.l
- */
-
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +22,6 @@ int yycolumn = 1;
 %option noyywrap
 %option yylineno
 
-/* ------- Définitions de base (abréviations de regex) ------- */
 LETTRE      [a-z]
 CHIFFRE     [0-9]
 IDENT_BASE  {LETTRE}({LETTRE}|{CHIFFRE}|"_"({LETTRE}|{CHIFFRE}))*
@@ -42,29 +32,21 @@ CHAINE      \"[^\"]*\"
 
 %%
 
- /* ------------------------------------------------------------ */
- /*  1. COMMENTAIRES (ignorés — aucun token produit)             */
- /* ------------------------------------------------------------ */
-"%%"[^\n]*              { /* commentaire ligne — ignorer */ }
-
-"/*"[^*]*"*/"           { /* commentaire bloc incorrect — pas la syntaxe ProLang */ }
+"%%"[^\n]*              { /* commentaire ligne : ignorer */ }
 
 "//*"                   {
-                            /* commentaire multi-ligne : consommer jusqu'à *// */
+                            /* commentaire multi-ligne : consommer jusqu a la fermeture */
                             int c;
-                            char prev1 = 0, prev2 = 0;
+                            int prev1 = 0, prev2 = 0;
                             while ((c = input()) != EOF) {
                                 if (c == '\n') { yylineno++; yycolumn = 1; }
                                 else yycolumn++;
                                 if (prev2 == '*' && prev1 == '/' && c == '/') break;
                                 prev2 = prev1;
-                                prev1 = (char)c;
+                                prev1 = c;
                             }
                         }
 
- /* ------------------------------------------------------------ */
- /*  2. MOTS-CLES RESERVES                                        */
- /* ------------------------------------------------------------ */
 "BeginProject"          { return T_BEGINPROJECT; }
 "EndProject"            { return T_ENDPROJECT;   }
 "Setup"                 { return T_SETUP;        }
@@ -89,12 +71,12 @@ CHAINE      \"[^\"]*\"
 "NON"                   { return T_NON;          }
 "out"                   { return T_OUT;          }
 
- /* ------------------------------------------------------------ */
+
  /*  3. IDENTIFICATEURS                                           */
  /*  La regex autorise les patterns valides (commence par lettre,*/
  /*  pas de __ ni de _ final), mais la longueur max (14) est     */
  /*  vérifiée dans l'action.                                      */
- /* ------------------------------------------------------------ */
+
 {IDENT_BASE}            {
                             /* Vérification longueur maximale : 14 caractères */
                             if ((int)strlen(yytext) > 14) {
@@ -112,9 +94,6 @@ CHAINE      \"[^\"]*\"
                             return T_IDENT;
                         }
 
- /* ------------------------------------------------------------ */
- /*  4. CONSTANTES NUMERIQUES                                     */
- /* ------------------------------------------------------------ */
 
  /* Réel signé entre parenthèses : (+5.76) ou (-5.76) */
 "("[+-]{REEL}")"        {
@@ -122,27 +101,18 @@ CHAINE      \"[^\"]*\"
                             return T_CONST_FLOAT;
                         }
 
- /* Entier signé entre parenthèses : (+5) ou (-5) */
 "("[+-]{ENTIER}")"      {
                             yylval.int_val = atoi(yytext + 1); /* skip '(' */
                             return T_CONST_INT;
                         }
-
- /* Réel non signé */
 {REEL}                  {
                             yylval.float_val = (float)atof(yytext);
                             return T_CONST_FLOAT;
                         }
-
- /* Entier non signé */
 {ENTIER}                {
                             yylval.int_val = atoi(yytext);
                             return T_CONST_INT;
                         }
-
- /* ------------------------------------------------------------ */
- /*  5. CHAINES DE CARACTERES                                    */
- /* ------------------------------------------------------------ */
 {CHAINE}                {
                             /* Stocker sans les guillemets */
                             int len = (int)strlen(yytext) - 2;
@@ -153,32 +123,18 @@ CHAINE      \"[^\"]*\"
                             return T_STRING;
                         }
 
- /* ------------------------------------------------------------ */
- /*  6. OPERATEURS                                               */
- /* ------------------------------------------------------------ */
- /* Opérateur d'affectation (→ dans le PDF, "<-" dans le code) */
 "<-"                    { return T_ASSIGN;  }
-
- /* Comparaison */
 "<="                    { return T_LE;      }
 ">="                    { return T_GE;      }
 "=="                    { return T_EQ;      }
 "!="                    { return T_NEQ;     }
 "<"                     { return T_LT;      }
 ">"                     { return T_GT;      }
-
- /* Arithmétique */
 "+"                     { return T_PLUS;    }
 "-"                     { return T_MINUS;   }
 "*"                     { return T_MUL;     }
 "/"                     { return T_DIV;     }
-
- /* Initialisation dans les déclarations */
 "="                     { return T_EQ_INIT; }
-
- /* ------------------------------------------------------------ */
- /*  7. SEPARATEURS ET SYMBOLES SPECIAUX                        */
- /* ------------------------------------------------------------ */
 ";"                     { return T_SEMI;    }
 ":"                     { return T_COLON;   }
 "|"                     { return T_PIPE;    }
@@ -189,16 +145,9 @@ CHAINE      \"[^\"]*\"
 "("                     { return T_LPAREN; }
 ")"                     { return T_RPAREN; }
 ","                     { return T_COMMA;  }
-
- /* ------------------------------------------------------------ */
- /*  8. ESPACES ET SAUTS DE LIGNE (ignorés)                     */
- /* ------------------------------------------------------------ */
 [ \t\r]+                { /* ignorer les espaces / tabulations */ }
 \n                      { yycolumn = 1; /* yylineno incrémenté par l'option */ }
 
- /* ------------------------------------------------------------ */
- /*  9. ERREUR LEXICALE — caractère/token illégal               */
- /* ------------------------------------------------------------ */
 .                       {
                             fprintf(stderr,
                                 "Erreur_Lexicale, ligne %d, colonne %d, entite : '%s'\n",

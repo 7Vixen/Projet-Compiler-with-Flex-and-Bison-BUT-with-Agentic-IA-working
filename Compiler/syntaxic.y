@@ -78,7 +78,7 @@ static DataType current_type = TYPE_UNKNOWN;
 %token T_AND T_OR T_NON
 
 /* I/O */
-%token T_OUT T_READ
+%token T_OUT
 
 /* Identificateur et constantes */
 %token <str_val>   T_IDENT T_STRING
@@ -380,7 +380,7 @@ borne_for
  *   out("msg", var) ;
  * ------------------------------------------------------------------ */
 lecture
-    : T_READ T_LPAREN T_IDENT T_RPAREN T_SEMI
+    : T_IN T_LPAREN T_IDENT T_RPAREN T_SEMI
         {
             Symbol *sym = st_lookup(&symtable, $3);
             if (sym == NULL) {
