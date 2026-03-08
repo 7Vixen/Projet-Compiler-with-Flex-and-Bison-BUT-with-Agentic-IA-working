@@ -514,7 +514,7 @@ char *yytext;
 #include "table_Hashage.h"
 #include "syntaxic.tab.h"
 
-/* ------- Compteurs de position pour les messages d'erreur ------- */
+/* Compteurs de position pour les messages d'erreur*/
 int yycolumn = 1;
 
 /* Mise à jour de la colonne à chaque token reconnu */
@@ -945,12 +945,17 @@ YY_RULE_SETUP
 #line 104 "lexical.l"
 {
                             yylval.int_val = atoi(yytext + 1); /* skip '(' */
+                            if(yylval.int_val < -32768 || yylval.int_val > 32767){
+                                fprintf(stderr,
+                                    "Erreur_Lexicale, ligne %d, colonne %d, entite : '%s' — constante entiere trop grande (max 32767)\n",
+                                    yylineno, yycolumn - (int)yyleng, yytext);
+                            }
                             return T_CONST_INT;
                         }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 108 "lexical.l"
+#line 113 "lexical.l"
 {
                             yylval.float_val = (float)atof(yytext);
                             return T_CONST_FLOAT;
@@ -958,7 +963,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 112 "lexical.l"
+#line 117 "lexical.l"
 {
                             yylval.int_val = atoi(yytext);
                             return T_CONST_INT;
@@ -966,7 +971,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 116 "lexical.l"
+#line 121 "lexical.l"
 {
                             /* Stocker sans les guillemets */
                             int len = (int)strlen(yytext) - 2;
@@ -979,127 +984,127 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 126 "lexical.l"
+#line 131 "lexical.l"
 { return T_ASSIGN;  }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 127 "lexical.l"
+#line 132 "lexical.l"
 { return T_LE;      }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 128 "lexical.l"
+#line 133 "lexical.l"
 { return T_GE;      }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 129 "lexical.l"
+#line 134 "lexical.l"
 { return T_EQ;      }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 130 "lexical.l"
+#line 135 "lexical.l"
 { return T_NEQ;     }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 131 "lexical.l"
+#line 136 "lexical.l"
 { return T_LT;      }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 132 "lexical.l"
+#line 137 "lexical.l"
 { return T_GT;      }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 133 "lexical.l"
+#line 138 "lexical.l"
 { return T_PLUS;    }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 134 "lexical.l"
+#line 139 "lexical.l"
 { return T_MINUS;   }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 135 "lexical.l"
+#line 140 "lexical.l"
 { return T_MUL;     }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 136 "lexical.l"
+#line 141 "lexical.l"
 { return T_DIV;     }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 137 "lexical.l"
+#line 142 "lexical.l"
 { return T_EQ_INIT; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 138 "lexical.l"
+#line 143 "lexical.l"
 { return T_SEMI;    }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 139 "lexical.l"
+#line 144 "lexical.l"
 { return T_COLON;   }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 140 "lexical.l"
+#line 145 "lexical.l"
 { return T_PIPE;    }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 141 "lexical.l"
+#line 146 "lexical.l"
 { return T_LBRACE; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 142 "lexical.l"
+#line 147 "lexical.l"
 { return T_RBRACE; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 143 "lexical.l"
+#line 148 "lexical.l"
 { return T_LBRACK; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 144 "lexical.l"
+#line 149 "lexical.l"
 { return T_RBRACK; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 145 "lexical.l"
+#line 150 "lexical.l"
 { return T_LPAREN; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 146 "lexical.l"
+#line 151 "lexical.l"
 { return T_RPAREN; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 147 "lexical.l"
+#line 152 "lexical.l"
 { return T_COMMA;  }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 148 "lexical.l"
+#line 153 "lexical.l"
 { /* ignorer les espaces / tabulations */ }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 149 "lexical.l"
+#line 154 "lexical.l"
 { yycolumn = 1; /* yylineno incrémenté par l'option */ }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 151 "lexical.l"
+#line 156 "lexical.l"
 {
                             fprintf(stderr,
                                 "Erreur_Lexicale, ligne %d, colonne %d, entite : '%s'\n",
@@ -1108,10 +1113,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 157 "lexical.l"
+#line 162 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 1115 "lex.yy.c"
+#line 1120 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1995,5 +2000,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 157 "lexical.l"
+#line 162 "lexical.l"
 

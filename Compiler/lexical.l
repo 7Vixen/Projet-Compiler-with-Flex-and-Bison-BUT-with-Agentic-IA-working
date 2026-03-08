@@ -5,7 +5,7 @@
 #include "table_Hashage.h"
 #include "syntaxic.tab.h"
 
-/* ------- Compteurs de position pour les messages d'erreur ------- */
+/* Compteurs de position pour les messages d'erreur*/
 int yycolumn = 1;
 
 /* Mise à jour de la colonne à chaque token reconnu */
@@ -103,6 +103,11 @@ CHAINE      \"[^\"]*\"
 
 "("[+-]{ENTIER}")"      {
                             yylval.int_val = atoi(yytext + 1); /* skip '(' */
+                            if(yylval.int_val < -32768 || yylval.int_val > 32767){
+                                fprintf(stderr,
+                                    "Erreur_Lexicale, ligne %d, colonne %d, entite : '%s' — constante entiere trop grande (max 32767)\n",
+                                    yylineno, yycolumn - (int)yyleng, yytext);
+                            }
                             return T_CONST_INT;
                         }
 {REEL}                  {
